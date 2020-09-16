@@ -1,6 +1,5 @@
 from rest_framework.generics import (
-	ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView, DestroyAPIView,
-	CreateAPIView,
+	ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView, DestroyAPIView, CreateAPIView,
 )
 from datetime import datetime
 
@@ -14,7 +13,7 @@ class BookFlight(CreateAPIView):
 	def perform_create(self, serializer):
 		flight_id = self.kwargs['flight_id']
 		serializer.save(
-			user=self.request.user, 
+			user=self.request.user,
 			flight= Flight.objects.get(id=flight_id),
 		)
 
@@ -22,6 +21,13 @@ class BookFlight(CreateAPIView):
 class FlightsList(ListAPIView):
 	queryset = Flight.objects.all()
 	serializer_class = FlightSerializer
+
+
+class CreateBooking(CreateAPIView):
+	serializer_class = UpdateBookingSerializer
+	def perform_create(self, serializer):
+	    flight_id = self.kwargs['flight_id']
+	    serializer.save(user=self.request.user, flight = Flight.objects.get(id=flight_id))
 
 
 class BookingsList(ListAPIView):
